@@ -9,14 +9,6 @@ const {
 } = require("grammy");
 const { conversations, createConversation } = require("@grammyjs/conversations");
 const bot = new Bot(process.env.BOT_API_KEY);
-// const axios = require("axios");
-
-// let curr = 0;
-// async function fetchCurrency() {
-//     const response = await axios.get("https://www.cbr-xml-daily.ru/daily_json.js");
-//     curr = response.data.Valute.CNY.Value;
-// }
-// fetchCurrency();
 
 bot.use(
     session({
@@ -45,8 +37,47 @@ const keyboard = new Keyboard()
     .text("Личная связь ❤️")
     .row()
     .text("Хочу скидку 🤩")
+    .text("Скачать пойзон")
     .resized();
 
+// async function createRequest(conversation, ctx) {
+//     const username = ctx.message.from.username;
+//     await ctx.reply("Напиши артикул");
+//     const vendorCode = await conversation.wait();
+//     await ctx.reply("Напиши размер");
+//     const size = await conversation.wait();
+
+//     await bot.api.sendMessage(
+//         644010577,
+//         `Новая заявка!\n1.Имя - @${username}\n2.Артикул - ${vendorCode.message.text}\n3.Размер - ${size.message.text}`
+//     );
+// }
+
+// bot.use(createConversation(createRequest));
+
+// bot.hears("Заявка на покупку", async (ctx) => {
+//     await ctx.conversation.enter("createRequest");
+// });
+bot.hears("Скачать пойзон", async (ctx) => {
+    const keyboard = new Keyboard()
+        .text("IOS")
+        .text("Android")
+        .row()
+        .text("Назад в меню >")
+        .resized();
+
+    await ctx.reply("Выберите платформу", {
+        reply_markup: keyboard,
+    });
+});
+bot.hears("IOS", async (ctx) => {
+    await ctx.reply(
+        "IOS - https://apps.apple.com/ru/app/得物-有毒的运动-潮流-好物/id1012871328"
+    );
+})
+bot.hears("Android", async (ctx) => {
+    await ctx.reply("Android - https://m.anxinapk.com/rj/12201303.html");
+})
 async function getClothesPrice(conversation, ctx) {
     await ctx.reply("Напиши стоимость товара в юанях.");
     const { message } = await conversation.wait();
@@ -172,30 +203,8 @@ bot.hears("Рассчитать стоимость 💴", async (ctx) => {
     });
 });
 
-bot.hears("Личная связь", async (ctx) => {
-    await ctx.reply("@icytrill");
-});
-
-bot.hears("Отзывы", async (ctx) => {
-    await ctx.reply("<a href='t.me/feedbackkk25'>Канал с отзывами</a>", {
-        parse_mode: "HTML",
-    });
-});
-
 bot.hears("Курс ¥", async (ctx) => {
     await ctx.reply("На данный момент курс юаня - 13.7");
-});
-
-bot.hears("Срок доставки", async (ctx) => {
-    await ctx.reply("<a href='t.me/feedbackkk25'>Канал с отзывами</a>", {
-        parse_mode: "HTML",
-    });
-});
-
-bot.hears("О магазине", async (ctx) => {
-    await ctx.reply("<a href='t.me/feedbackkk25'>Канал с отзывами</a>", {
-        parse_mode: "HTML",
-    });
 });
 
 bot.hears("Срок доставки 🚀", async (ctx) => {
